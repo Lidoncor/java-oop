@@ -1,5 +1,7 @@
 package com.eltex;
 
+import org.jetbrains.annotations.Nullable;
+
 public record Post(
         long id,
         long authorId,
@@ -10,12 +12,14 @@ public record Post(
         String published,
         String link,
         boolean mentionedMe,
-        boolean likedByMe) {
+        boolean likedByMe,
+        @Nullable Attachment attachment) {
 
     public Builder builder() {
         return new Builder()
                 .setAuthor(author)
-                .setContent(content);
+                .setContent(content)
+                .setAttachment(attachment);
     }
 
     static class Builder {
@@ -31,6 +35,7 @@ public record Post(
         private String link = "";
         private boolean mentionedMe = false;
         private boolean likedByMe = false;
+        @Nullable private Attachment attachment = new Attachment("", AttachmentType.IMAGE);
 
         // Каждый метод строителя запоминает данные и возвращает сам себя
         public Builder setId(final long id) {
@@ -83,6 +88,11 @@ public record Post(
             return this;
         }
 
+        public Builder setAttachment(@Nullable final Attachment attachment) {
+            this.attachment = attachment;
+            return this;
+        }
+
         // В финале вызываем build, чтобы получить результат
         public Post build() {
             return new Post(
@@ -95,7 +105,8 @@ public record Post(
                     published,
                     link,
                     mentionedMe,
-                    likedByMe);
+                    likedByMe,
+                    attachment);
         }
     }
 }
