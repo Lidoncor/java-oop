@@ -1,21 +1,33 @@
 package com.eltex;
 
+import org.jetbrains.annotations.Nullable;
+
 public record Post(
         long id,
         long authorId,
         String author,
-        String authorJob,
-        String authorAvatar,
+        @Nullable String authorJob,
+        @Nullable String authorAvatar,
         String content,
         String published,
-        String link,
+        @Nullable Coordinates coords,
+        @Nullable String link,
         boolean mentionedMe,
         boolean likedByMe) {
 
     public Builder builder() {
         return new Builder()
+                .setId(id)
+                .setAuthorId(authorId)
                 .setAuthor(author)
-                .setContent(content);
+                .setAuthorJob(authorJob)
+                .setAuthorAvatar(authorAvatar)
+                .setContent(content)
+                .setPublished(published)
+                .setCoords(coords)
+                .setLink(link)
+                .setMentionedMe(mentionedMe)
+                .setLikedByMe(likedByMe);
     }
 
     static class Builder {
@@ -24,11 +36,12 @@ public record Post(
         private long id = 0;
         private long authorId = 0;
         private String author = "";
-        private String authorJob = "";
-        private String authorAvatar = "";
+        @Nullable private String authorJob = "";
+        @Nullable private String authorAvatar = "";
         private String content = "";
         private String published = "";
-        private String link = "";
+        @Nullable private Coordinates coords = new Coordinates(0, 0);
+        @Nullable private String link = "";
         private boolean mentionedMe = false;
         private boolean likedByMe = false;
 
@@ -48,12 +61,12 @@ public record Post(
             return this;
         }
 
-        public Builder setAuthorJob(final String authorJob) {
+        public Builder setAuthorJob(@Nullable final String authorJob) {
             this.authorJob = authorJob;
             return this;
         }
 
-        public Builder setAuthorAvatar(final String authorAvatar) {
+        public Builder setAuthorAvatar(@Nullable final String authorAvatar) {
             this.authorAvatar = authorAvatar;
             return this;
         }
@@ -68,7 +81,12 @@ public record Post(
             return this;
         }
 
-        public Builder setLink(final String link) {
+        public Builder setCoords(@Nullable final Coordinates coords) {
+            this.coords = coords;
+            return this;
+        }
+
+        public Builder setLink(@Nullable final String link) {
             this.link = link;
             return this;
         }
@@ -93,6 +111,7 @@ public record Post(
                     authorAvatar,
                     content,
                     published,
+                    coords,
                     link,
                     mentionedMe,
                     likedByMe);
