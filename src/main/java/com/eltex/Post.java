@@ -13,7 +13,8 @@ public record Post(
         @Nullable Coordinates coords,
         @Nullable String link,
         boolean mentionedMe,
-        boolean likedByMe) {
+        boolean likedByMe,
+        @Nullable Attachment attachment) {
 
     public Builder builder() {
         return new Builder()
@@ -28,6 +29,8 @@ public record Post(
                 .setLink(link)
                 .setMentionedMe(mentionedMe)
                 .setLikedByMe(likedByMe);
+                .setContent(content)
+                .setAttachment(attachment);
     }
 
     static class Builder {
@@ -44,6 +47,7 @@ public record Post(
         @Nullable private String link = "";
         private boolean mentionedMe = false;
         private boolean likedByMe = false;
+        @Nullable private Attachment attachment = new Attachment("", AttachmentType.IMAGE);
 
         // Каждый метод строителя запоминает данные и возвращает сам себя
         public Builder setId(final long id) {
@@ -101,6 +105,11 @@ public record Post(
             return this;
         }
 
+        public Builder setAttachment(@Nullable final Attachment attachment) {
+            this.attachment = attachment;
+            return this;
+        }
+
         // В финале вызываем build, чтобы получить результат
         public Post build() {
             return new Post(
@@ -114,7 +123,8 @@ public record Post(
                     coords,
                     link,
                     mentionedMe,
-                    likedByMe);
+                    likedByMe,
+                    attachment);
         }
     }
 }
